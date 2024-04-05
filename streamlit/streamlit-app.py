@@ -27,12 +27,14 @@ params = [satisfaction_level, last_evaluation, number_project,
 
 input_data = dict(zip(names, params))
 output_ = None
+
 if st.button('Predict'):
     #pred = predict(satisfaction_level, last_evaluation, number_project, average_montly_hours, time_spend_company, 
     #                                         Work_accident, promotion_last_5years,department, salary)
     
     try:
         output_ = requests.post(url = 'http://backend-api.default.svc.cluster.local:8000/predict', data = json.dumps(input_data))
+        # output_ = requests.post(url = 'http://localhost:8000/predict', data = json.dumps(input_data))
     except ConnectionError:
        raise ConnectionError('Not able to connect to api server')
     

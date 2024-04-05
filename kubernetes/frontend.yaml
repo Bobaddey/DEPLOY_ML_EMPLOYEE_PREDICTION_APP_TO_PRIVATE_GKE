@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: streamlit
-  namespace: default
+  namespace: mlops
 spec:
   replicas: 1
   selector:
@@ -15,14 +15,28 @@ spec:
     spec:
       containers:
       - name: streamlitapp
-        image: sunilkumardash9/streamlit-app:v1
-        imagePullPolicy: Never
+        image: bobaddey/streamlit-fe:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "400Mi"
+            cpu: "100m"
+          limits:
+            memory: "600Mi"
+            cpu: "150m"
+      tolerations:
+        - key: kubernetes.io/arch # IMPORTANT here
+          operator: Equal
+          value: "arm64"
+          effect: NoSchedule
+      imagePullSecrets: 
+      - name: regcred
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: streamlit-app
-  namespace: default
+  namespace: mlops
 spec:
   type: LoadBalancer
   selector:
